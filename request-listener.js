@@ -10,14 +10,27 @@ function notFoundHandler(callback) {
   callback({ payload, head: 404 });
 }
 
-const router = {
+const post = {
   hello: helloHandler
 };
 
+const router = {
+  post
+};
+
+function getHandler(method, path) {
+  const methodHandlers = router[method];
+  if (!methodHandlers) {
+    return notFoundHandler;
+  }
+  return methodHandlers[path] || notFoundHandler;
+}
+
 function requestListener(req, res) {
+  const method = req.method.toLowerCase();
   const { pathname: path } = url.parse(req.url, true);
-  const reqPath  = path.replace(/^\/+|\/+$/g, '');
-  const handler = router[reqPath] || notFoundHandler;
+  const trimPath  = path.replace(/^\/+|\/+$/g, '');
+  const handler = getHandler(method, trimPath);
 
   handler(({ head, payload }) => {
     head = head || 200;
