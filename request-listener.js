@@ -1,3 +1,9 @@
+/**
+ * Logic of the app
+ * code for handling HTTP(S) requests
+ *
+ */
+
 const url = require('url');
 
 function helloHandler(callback) {
@@ -40,5 +46,10 @@ function requestListener(req, res) {
     res.end(JSON.stringify(payload));
   });
 }
+
+/**
+ * Expose
+ *
+ */
 
 module.exports = requestListener;
